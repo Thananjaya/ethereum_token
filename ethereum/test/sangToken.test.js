@@ -21,5 +21,10 @@ describe('test cases for SangToken ERC 20 token', () => {
     it('testing whether the contract been deployed', () => {
         assert.ok(sangToken.options.address)
     });
+
+    it('test for total supply of the tokens', async () => {
+        const totalSupply = await sangToken.methods.totalSupply().call()
+        assert.equal(totalSupply, 15000);
+    });
 });
 
