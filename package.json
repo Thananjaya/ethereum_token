@@ -1,0 +1,18 @@
+{
+  "name": "sangtoken",
+  "version": "1.0.0",
+  "description": "ERC 20 token",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ethereum/**/*.js"
+  },
+  "author": "Thananjaya Chakravarthy S",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "ganache-cli": "^6.0.3",
+    "mocha": "^4.1.0",
+    "solc": "^0.4.19",
+    "web3": "1.0.0-beta.35"
+  }
+}
