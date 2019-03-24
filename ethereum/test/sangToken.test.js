@@ -26,6 +26,13 @@ describe('test cases for SangToken ERC 20 token', () => {
         assert.ok(sangToken.options.address)
     });
 
+    it('checks for the tokan name and symbol', async() => {
+        const name = await sangToken.methods.name().call();
+        const symbol = await sangToken.methods.symbol().call();
+        assert.equal(name, 'Sang Token');
+        assert.equal(symbol, 'SANG')
+    })
+
     it('test for total supply of the tokens', async () => {
         const totalSupply = await sangToken.methods.totalSupply().call()
         assert.equal(totalSupply, initialSupply);
@@ -34,6 +41,15 @@ describe('test cases for SangToken ERC 20 token', () => {
     it('tests whether the inial supply is been allocated to the administrator', async () => {
         const adminBalance = await sangToken.methods.balanceOf(accounts[0]).call()
         assert.equal(adminBalance, initialSupply);
+    });
+
+    it('tests for transfering the token', async () => {
+        try {
+            const transferEvent = await sangToken.methods.transfer(accounts[1], 100).send({ from: accounts[0], gas: '100000'});
+            assert.equal(true, transferEvent);
+        } catch(err) {
+            assert(err);
+        }
     });
 });
 
