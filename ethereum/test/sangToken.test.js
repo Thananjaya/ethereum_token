@@ -6,7 +6,7 @@ const compiledContract = require('../build/SangToken.json');
 
 let accounts;
 let sangToken;
-const initialSupply = 100000;
+const initialSupply = 100;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
@@ -45,10 +45,26 @@ describe('test cases for SangToken ERC 20 token', () => {
 
     it('tests for transfering the token', async () => {
         try {
-            const transferEvent = await sangToken.methods.transfer(accounts[1], 100).send({ from: accounts[0], gas: '100000'});
-            assert.equal(true, transferEvent);
+            await sangToken.methods.transfer(accounts[1], 25).send({from: accounts[0], gas: '100000'});
         } catch(err) {
-            assert(err);
+            assert.fail(err);
+        }
+    });
+
+    it('tests for allowing/approving an user as a spender with spending allowance/limit', async() => {
+        try {
+            await sangToken.methods.approve(accounts[2], 10).send({from: accounts[0], gas: '100000'});
+        } catch(err) {
+            assert.fail(err);
+        }
+    });
+
+    it('tests for any user/spender spends the token from the owner/approver account', async() => {
+        try{
+            await sangToken.methods.approve(accounts[2], 50).send({from: accounts[0], gas: '100000'});
+            await sangToken.methods.transferFrom(accounts[0], accounts[3], 10).send({from: accounts[2], gas: '1000000'});
+        } catch(err) {
+            assert.fail(err);
         }
     });
 });
