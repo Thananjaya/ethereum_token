@@ -2,15 +2,15 @@ const assert = require('assert');
 const Web3 = require('web3');
 const ganache = require('ganache-cli');
 const web3 = new Web3(ganache.provider());
-const { interface, bytecode } = require('../compile/compile');
+const compiledContract = require('../build/SangToken.json'); 
 
 let accounts;
 let sangToken;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
-    sangToken = await new web3.eth.Contract(JSON.parse(interface))
-        .deploy({data: bytecode})
+    sangToken = await new web3.eth.Contract(JSON.parse(compiledContract.interface))
+        .deploy({data: compiledContract.bytecode})
         .send({
             from: accounts[0],
             gas: '1000000'
