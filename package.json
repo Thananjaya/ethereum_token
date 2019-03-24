@@ -4,7 +4,8 @@
   "description": "ERC 20 token",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ethereum/**/*.js"
+    "test": "mocha ethereum/test/sangToken.test.js",
+    "compile": "node ethereum/compile/compile.js"
   },
   "author": "Thananjaya Chakravarthy S",
   "license": "ISC",

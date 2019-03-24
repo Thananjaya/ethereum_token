@@ -6,11 +6,15 @@ const compiledContract = require('../build/SangToken.json');
 
 let accounts;
 let sangToken;
+const initialSupply = 100000;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
     sangToken = await new web3.eth.Contract(JSON.parse(compiledContract.interface))
-        .deploy({data: compiledContract.bytecode})
+        .deploy({
+            data: compiledContract.bytecode,
+            arguments: [initialSupply]
+        })
         .send({
             from: accounts[0],
             gas: '1000000'
@@ -24,7 +28,12 @@ describe('test cases for SangToken ERC 20 token', () => {
 
     it('test for total supply of the tokens', async () => {
         const totalSupply = await sangToken.methods.totalSupply().call()
-        assert.equal(totalSupply, 15000);
+        assert.equal(totalSupply, initialSupply);
+    });
+
+    it('tests whether the inial supply is been allocated to the administrator', async () => {
+        const adminBalance = await sangToken.methods.balanceOf(accounts[0]).call()
+        assert.equal(adminBalance, initialSupply);
     });
 });
 
