@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ethereum/test/sangToken.test.js",
-    "compile": "node ethereum/compile/compile.js"
+    "compile": "node ethereum/compile/compile.js",
+    "deploy": "node ethereum/deploy/deploy.js",
+    "dev": "next"
   },
   "author": "Thananjaya Chakravarthy S",
   "license": "ISC",
@@ -13,7 +15,11 @@
     "fs-extra": "^7.0.1",
     "ganache-cli": "^6.0.3",
     "mocha": "^4.1.0",
+    "next": "^8.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "solc": "^0.4.19",
+    "truffle-hdwallet-provider": "0.0.3",
     "web3": "1.0.0-beta.35"
   }
 }
