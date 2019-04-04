@@ -2,29 +2,33 @@ import React, { Component } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 
 class ICOForm extends Component {
-    state={
-        value: ''
+    constructor(props){
+        super(props);
+        this.state = {
+            value: '',
+        }
     }
 
-    getToken(){
+    getToken = () => {
         console.log('it is working', this.state.value);
     }
 
     render(){
         return(
             <Form>
-                <Form.Field>
-                    <input 
-                        placeholder='Get your token'
-                        onChange={(event) => this.setState({value: event.target.value})} 
+                <Form.Group>
+                    <Form.Input 
+                        placeholder="Get your tokens!!"
+                        onChange={(event) => this.setState({value: event.target.value})}
+                        type="number" 
+                        width={14} 
                     />
-                </Form.Field>
-                <Button 
-                    type="submit"
-                    onClick={() => this.getToken()}
-                >
-                    Get it!
-                </Button>
+                    <Form.Button 
+                        type="submit"
+                        content="Purchase"
+                        onClick={() => this.getToken()}
+                    />
+                </Form.Group>    
             </Form>    
         )
     }
