@@ -20,7 +20,8 @@ class ICOForm extends Component {
                     <Form.Input 
                         placeholder="Get your tokens!!"
                         onChange={(event) => this.setState({value: event.target.value})}
-                        type="number" 
+                        value={this.state.value}
+                        type="number"
                         width={14} 
                     />
                     <Form.Button 
