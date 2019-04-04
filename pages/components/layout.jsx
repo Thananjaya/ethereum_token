@@ -5,7 +5,7 @@ import Header from './header';
 
 export default (props) => {
     return(
-        <Container>
+        <Container textAlign='center'>
             <Head>
                 <link
                     rel="stylesheet"
