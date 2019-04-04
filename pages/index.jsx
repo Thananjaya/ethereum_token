@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import Layout from './components/layout';
 
-class App extends Component {
+class TokenSale extends Component {
     render(){
         return(
-            <h1>this is sang token sale contract</h1>
+            <Layout>
+                <h1> Sang token is always best</h1>
+            </Layout>
         )
     }
 }
-export default App
+export default TokenSale;
