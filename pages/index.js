@@ -8,40 +8,42 @@ import instance from '../ethereum/web3/sangTokenSale';
 
 class TokenSale extends Component {
     state = {
-        amount: 0.01,
+        amount: null,
         adminAccount: '',
         currentUserAccount: '',
         message: '',
-        ts_status: false
     }
 
     async componentWillMount() {
         const currentUserAccount = await web3.eth.getAccounts();
         const adminAccount = await instance.methods.admin().call();
-        this.setState({ currentUserAccount, adminAccount });
+        const tokenPrice = await instance.methods.tokenPrice().call();
+        this.setState({ currentUserAccount, adminAccount, amount: web3.utils.fromWei(tokenPrice, 'ether') });
     }
 
     setTotalTokens = async (totalTokens) => {
         this.setState({ message: '', ts_status: false });
         try{
-            await instance.methods.setNumberOfTokensForSale(web3.utils.toWei(totalTokens, 'ether')).send({
-                from: this.state.currentUserAccount,
+            await instance.methods.setNumberOfTokensForSale(totalTokens).send({
+                from: this.state.currentUserAccount[0],
             });
-            this.setState({ ts_status: true });
+            return true
         } catch(err) {
-            this.setState({ message: err.message })
+            this.setState({ message: err.message });
+            return false;
         }
     }
 
     setTokenPrice = async (declaredPrice) => {
         this.setState({ amount: declaredPrice, message: '' });
         try {
-            await instance.methods.setTokenPrice().send({
-                from: this.state.currentUserAccount,
-                value: web3.utils.toWei(declaredPrice, 'ether')
+            await instance.methods.setTokenPrice(web3.utils.toWei(declaredPrice, 'ether')).send({
+                from: this.state.currentUserAccount[0],
             });
+            return true;
         } catch(err) {
-            this.setState({ message: err.message })
+            this.setState({ message: err.message });
+            return false;
         }
     }
 
@@ -71,7 +73,6 @@ class TokenSale extends Component {
                     adminAccount={this.state.adminAccount}
                     setToken={(tokenPrice) => this.setTokenPrice(tokenPrice)}
                     totalTokens = {(totalTokens) => this.setTotalTokens(totalTokens)}
-                    tokenStatus={this.state.ts_status}
                 />
                 {this.renderMessage()}
                 <ICOForm />

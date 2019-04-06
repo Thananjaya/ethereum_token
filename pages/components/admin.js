@@ -17,12 +17,11 @@ class Admin extends Component {
     componentWillReceiveProps(props) {
         props.currentUserAccount === props.adminAccount ? this.setState({ admin: true}) : null
     }
-    setTokenConfig(){
+
+    setTokenConfig = async () => {
         this.setState({ loading: true });
-        this.props.totalTokens(this.state.totalTokens);
-        if( this.props.tokenStatus ) {
-            this.props.setToken(this.state.value);        
-        }
+        await this.props.totalTokens(this.state.totalTokens);
+        await this.props.setToken(this.state.value);        
         this.setState({ loading: false });
     }
 
