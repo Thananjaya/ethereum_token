@@ -7,13 +7,12 @@ import web3 from '../ethereum/web3/web3';
 class TokenSale extends Component {
     state = {
         amount: 0.01,
-        account: '',
-        loading: false
+        account: ''
     }
 
     async componentDidMount() {
-        const account = await web3.eth.getAccounts();
-        this.setState({ account });
+        const userAccounts = await web3.eth.getAccounts();
+        this.setState({ account: userAccounts});
     }
 
     render(){

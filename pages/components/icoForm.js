@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 
 class ICOForm extends Component {
     constructor(props){
@@ -7,10 +7,6 @@ class ICOForm extends Component {
         this.state = {
             value: '',
         }
-    }
-
-    getToken = () => {
-        console.log('it is working', this.state.value);
     }
 
     render(){
