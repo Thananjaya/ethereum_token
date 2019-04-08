@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Layout from './components/layout';
 import ICOForm from './components/icoForm';
 import Admin from './components/admin';
-import { Header, Message, Icon} from 'semantic-ui-react';
+import { Header, Message, Icon, Progress} from 'semantic-ui-react';
 import web3 from '../ethereum/web3/web3';
 import instance from '../ethereum/web3/sangTokenSale';
 
@@ -10,15 +10,25 @@ class TokenSale extends Component {
     state = {
         amount: null,
         adminAccount: '',
+        tokensold:'',
+        tokensForSale: '',
         currentUserAccount: '',
         message: '',
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         const currentUserAccount = await web3.eth.getAccounts();
         const adminAccount = await instance.methods.admin().call();
         const tokenPrice = await instance.methods.tokenPrice().call();
-        this.setState({ currentUserAccount, adminAccount, amount: web3.utils.fromWei(tokenPrice, 'ether') });
+        const tokenSold = await instance.methods.tokensSold().call();
+        const tokensForSale = await instance.methods.tokensForSale().call();
+        this.setState({ 
+            currentUserAccount, 
+            adminAccount, 
+            amount: web3.utils.fromWei(tokenPrice, 'ether'),
+            tokenSold,
+            tokensForSale
+        });
     }
 
     setTotalTokens = async (totalTokens) => {
@@ -64,18 +74,26 @@ class TokenSale extends Component {
     }
 
     render(){
+        const tokenPercentile = (this.state.tokenSold * 100)/this.state.tokensForSale
+        console.log(tokenPercentile)
         return(
             <Layout>
                 <Header size='medium'>Sang Token Initial Coin Offerings!!</Header>
                 <Header size='small'>Token Costs {this.state.amount} in Ether!!</Header>
-                <Admin 
-                    currentUserAccount={this.state.currentUserAccount[0]} 
-                    adminAccount={this.state.adminAccount}
-                    setToken={(tokenPrice) => this.setTokenPrice(tokenPrice)}
-                    totalTokens = {(totalTokens) => this.setTotalTokens(totalTokens)}
+                { this.state.adminAccount === this.state.currentUserAccount[0] ? 
+                    <Admin 
+                        currentUserAccount={this.state.currentUserAccount[0]} 
+                        adminAccount={this.state.adminAccount}
+                        setToken={(tokenPrice) => this.setTokenPrice(tokenPrice)}
+                        totalTokens = {(totalTokens) => this.setTotalTokens(totalTokens)}
+                    />
+                    :
+                    <ICOForm />
+                }
+                <Progress 
+                    percent={tokenPercentile} 
+                    indicating
                 />
-                {this.renderMessage()}
-                <ICOForm />
                 <Message icon>
                     <Icon 
                         name='ethereum'
@@ -85,6 +103,7 @@ class TokenSale extends Component {
                         <Message.Header>{this.state.currentUserAccount[0]}</Message.Header>
                     </Message.Content>
                 </Message>
+                {this.renderMessage()}
             </Layout>
         )
     }
