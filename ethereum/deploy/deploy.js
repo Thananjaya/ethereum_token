@@ -23,7 +23,7 @@ const deploy = async () => {
             gas: '1000000'
         });
     const tokenAddress = deployToken.options.address;
-    const deployTokenSale = await new web3.eth.Contract(JSON.parse(compiledTokenSaleContract.interface))
+    await new web3.eth.Contract(JSON.parse(compiledTokenSaleContract.interface))
         .deploy({
             data: compiledTokenSaleContract.bytecode,
             arguments: [tokenAddress]

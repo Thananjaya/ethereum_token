@@ -9,25 +9,31 @@ import instance from '../ethereum/web3/sangTokenSale';
 class TokenSale extends Component {
     state = {
         amount: null,
+        message: null,
         adminAccount: '',
-        tokensold:'',
+        tokensSold:'',
         tokensForSale: '',
         currentUserAccount: '',
-        message: '',
     }
 
     async componentDidMount() {
         const currentUserAccount = await web3.eth.getAccounts();
         const adminAccount = await instance.methods.admin().call();
-        const tokenPrice = await instance.methods.tokenPrice().call();
-        const tokenSold = await instance.methods.tokensSold().call();
-        const tokensForSale = await instance.methods.tokensForSale().call();
-        this.setState({ 
+        this.setState({
             currentUserAccount, 
-            adminAccount, 
-            amount: web3.utils.fromWei(tokenPrice, 'ether'),
-            tokenSold,
-            tokensForSale
+            adminAccount
+        })
+        this.getTokenInformation();    
+    }
+
+    getTokenInformation = async ()  => {
+        const tokensSold = await instance.methods.tokensSold().call();
+        const tokensForSale = await instance.methods.tokensForSale().call();
+        const tokenPrice = await instance.methods.tokenPrice().call();
+        this.setState({ 
+            tokensSold,
+            tokensForSale,
+            amount: web3.utils.fromWei(tokenPrice, 'ether')
         });
     }
 
@@ -57,16 +63,16 @@ class TokenSale extends Component {
         }
     }
 
-    renderMessage(){
-        if(this.state.message) {
+    renderMessage = (message) => {
+        if(message !== null) {
             return(
-                <Message icon>
+                <Message icon warning>
                     <Icon 
                         name='ethereum'
                     />
                     <Message.Content>
-                        Your Account is 
-                        <Message.Header>{this.state.message}</Message.Header>
+                        Error been detected
+                        <Message.Header>{message}</Message.Header>
                     </Message.Content>
                 </Message> 
             )
@@ -74,8 +80,7 @@ class TokenSale extends Component {
     }
 
     render(){
-        const tokenPercentile = (this.state.tokenSold * 100)/this.state.tokensForSale
-        console.log(tokenPercentile)
+        const tokenPercentile = 25;
         return(
             <Layout>
                 <Header size='medium'>Sang Token Initial Coin Offerings!!</Header>
@@ -88,12 +93,19 @@ class TokenSale extends Component {
                         totalTokens = {(totalTokens) => this.setTotalTokens(totalTokens)}
                     />
                     :
-                    <ICOForm />
+                    <ICOForm 
+                        currentUserAccount = {this.state.currentUserAccount}
+                        tokenPrice = {this.state.amount}
+                        success={() => this.getTokenInformation()}
+                    />
                 }
                 <Progress 
-                    percent={tokenPercentile} 
+                    percent={tokenPercentile}
+                    progress 
                     indicating
-                />
+                >
+                Total tokens sold {this.state.tokensSold} / {this.state.tokensForSale}
+                </Progress>
                 <Message icon>
                     <Icon 
                         name='ethereum'
@@ -101,9 +113,10 @@ class TokenSale extends Component {
                     <Message.Content>
                         Your Account is 
                         <Message.Header>{this.state.currentUserAccount[0]}</Message.Header>
+                        <p>For your kind notice, Sang Token is been deployed on Rinkeby Test Network!!</p>
                     </Message.Content>
                 </Message>
-                {this.renderMessage()}
+                {this.renderMessage(this.state.message)}
             </Layout>
         )
     }
