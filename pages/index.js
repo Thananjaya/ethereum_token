@@ -80,7 +80,7 @@ class TokenSale extends Component {
     }
 
     render(){
-        const tokenPercentile = 25;
+        const tokenPercentile = (this.state.tokensSold * 100) / this.state.tokensForSale;
         return(
             <Layout>
                 <Header size='medium'>Sang Token Initial Coin Offerings!!</Header>
@@ -100,7 +100,7 @@ class TokenSale extends Component {
                     />
                 }
                 <Progress 
-                    percent={tokenPercentile}
+                    percent={Math.round(tokenPercentile)}
                     progress 
                     indicating
                 >
