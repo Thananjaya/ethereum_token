@@ -27,3 +27,11 @@ This applciation been designed for both admin who controls the token sale and fo
 
 > React.js
 >> for rendering the web pages
+
+
+### Installation
+
+* Clone this project
+* Install the packages by running ```npm install```
+* Metamask is required, thus install the metamask and create a account in it
+* Run ```npm run dev``` to start the applciation
