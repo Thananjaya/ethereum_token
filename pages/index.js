@@ -17,12 +17,19 @@ class TokenSale extends Component {
     }
 
     async componentDidMount() {
-        const currentUserAccount = await web3.eth.getAccounts();
+        let currentUserAccount = await web3.eth.getAccounts();
         const adminAccount = await instance.methods.admin().call();
-        this.setState({
-            currentUserAccount, 
-            adminAccount
-        })
+        if (currentUserAccount.length == 0) {
+            this.setState({ 
+                currentUserAccount: 'Kindly login in to metamask to access your account', 
+                adminAccount 
+            });
+        } else {
+            this.setState({ 
+                currentUserAccount: currentUserAccount[0], 
+                adminAccount 
+            });
+        }
         this.getTokenInformation();    
     }
 
@@ -85,9 +92,9 @@ class TokenSale extends Component {
             <Layout>
                 <Header size='medium'>Sang Token Initial Coin Offerings!!</Header>
                 <Header size='small'>Token Costs {this.state.amount} in Ether!!</Header>
-                { this.state.adminAccount === this.state.currentUserAccount[0] ? 
+                { this.state.adminAccount === this.state.currentUserAccount ? 
                     <Admin 
-                        currentUserAccount={this.state.currentUserAccount[0]} 
+                        currentUserAccount={this.state.currentUserAccount} 
                         adminAccount={this.state.adminAccount}
                         setToken={(tokenPrice) => this.setTokenPrice(tokenPrice)}
                         totalTokens = {(totalTokens) => this.setTotalTokens(totalTokens)}
@@ -112,7 +119,7 @@ class TokenSale extends Component {
                     />
                     <Message.Content>
                         Your Account is 
-                        <Message.Header>{this.state.currentUserAccount[0]}</Message.Header>
+                        <Message.Header>{this.state.currentUserAccount}</Message.Header>
                         <p>For your kind notice, Sang Token is been deployed on Rinkeby Test Network!!</p>
                     </Message.Content>
                 </Message>

@@ -18,7 +18,7 @@ class ICOForm extends Component {
         this.setState({ loading: true, message: null });
         try {
             await instance.methods.buyTokens(this.state.value).send({
-                from: this.props.currentUserAccount[0],
+                from: this.props.currentUserAccount,
                 value: web3.utils.toWei(String(totalAmount), 'ether')
             });
             this.props.success();
